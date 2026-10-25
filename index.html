@@ -1,1 +1,75 @@
+HTML
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>بقالة بن قاسم</title>
+<style>
+body{font-family:Arial,sans-serif;background:#f4f7f2;margin:0;color:#222}
+header{background:#176b43;color:white;text-align:center;padding:24px 12px}
+header h1{margin:0 0 8px}
+main{max-width:700px;margin:auto;padding:16px}
+.notice{background:white;padding:14px;border-radius:12px;margin:12px 0}
+.product{background:white;border-radius:12px;padding:14px;margin:12px 0;display:flex;justify-content:space-between;align-items:center;gap:10px}
+button{background:#176b43;color:white;border:0;border-radius:8px;padding:11px 14px;font-size:16px}
+input{box-sizing:border-box;width:100%;padding:12px;margin:6px 0;border:1px solid #ccc;border-radius:8px;font-size:16px}
+small{color:#555}
+</style>
+</head>
+<body>
+<header>
+<h1>🛒 بقالة بن قاسم</h1>
+<p>كل احتياجات البيت في مكان واحد</p>
+</header>
+<main>
+<div class="notice">
+<strong>أهلًا وسهلًا بكم</strong>
+<p>تسوّقوا بسهولة، واطلبوا عبر واتساب. التوصيل مجاني.</p>
+</div>
+<h2>منتجاتنا</h2>
+<div class="product">
+<div><strong>ماء</strong><p>السعر: 200 ريال</p></div>
+<button onclick="add('ماء',200)">أضف للسلة</button>
+</div>
+<h2>سلة المشتريات</h2>
+<div class="notice" id="cart">السلة فارغة</div>
+<h2>بيانات الطلب</h2>
+<input id="customer" placeholder="اسم الزبون">
+<input id="phone" placeholder="رقم هاتف الزبون" inputmode="tel">
+<input id="address" placeholder="العنوان أو موقع التوصيل">
+<button onclick="order()">إرسال الطلب عبر واتساب</button>
+<p><small>الدفع نقدًا عند الاستلام أو بالتحويل الإلكتروني بالاتفاق مع البقالة.</small></p>
+</main>
+<script>
+let cart=[];
+function add(name,price){
+let item=cart.find(x=>x.name===name);
+if(item)item.qty++;else cart.push({name,price,qty:1});
+show();
+}
+function show(){
+let el=document.getElementById('cart');
+if(!cart.length){el.textContent='السلة فارغة';return;}
+el.innerHTML=cart.map(x=>x.name+' × '+x.qty+' = '+(x.price*x.qty)+' ريال').join('<br>')+
+'<hr>الإجمالي: '+cart.reduce((s,x)=>s+x.price*x.qty,0)+' ريال';
+}
+function order(){
+let name=document.getElementById('customer').value.trim();
+let phone=document.getElementById('phone').value.trim();
+let address=document.getElementById('address').value.trim();
+if(!cart.length){alert('أضف منتجًا إلى السلة أولًا');return;}
+if(!name||!phone||!address){alert('أكمل الاسم ورقم الهاتف والعنوان');return;}
+let total=cart.reduce((s,x)=>s+x.price*x.qty,0);
+let msg='طلب جديد من بقالة بن قاسم%0Aالاسم: '+encodeURIComponent(name)+
+'%0Aهاتف الزبون: '+encodeURIComponent(phone)+
+'%0Aالعنوان: '+encodeURIComponent(address)+
+'%0Aالطلبات:%0A'+encodeURIComponent(cart.map(x=>x.name+' × '+x.qty+' = '+x.price*x.qty+' ريال').join('\n'))+
+'%0Aالإجمالي: '+total+' ريال';
+window.open('https://wa.me/967714411885?text='+msg,'_blank');
+}
+</script>
+</body>
+</html>
 
